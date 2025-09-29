@@ -1,0 +1,183 @@
+{
+  "results": [
+    {
+      "image_path": "smart_marine_project/static/uploads/20250929_185032_ppt.jpg",
+      "detections": [
+        {
+          "bbox": [
+            222.42965698242188,
+            165.29786682128906,
+            265.1612243652344,
+            190.4124298095703
+          ],
+          "confidence": 0.7019802927970886,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        },
+        {
+          "bbox": [
+            206.72190856933594,
+            183.94790649414062,
+            286.4819641113281,
+            236.80099487304688
+          ],
+          "confidence": 0.6899473071098328,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        },
+        {
+          "bbox": [
+            423.371337890625,
+            522.9181518554688,
+            436.61865234375,
+            541.8331909179688
+          ],
+          "confidence": 0.5816394686698914,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        },
+        {
+          "bbox": [
+            486.6823425292969,
+            507.5482177734375,
+            518.62255859375,
+            606.8743896484375
+          ],
+          "confidence": 0.5584695339202881,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        }
+      ],
+      "num_detections": 4,
+      "processing_time": 0.096917,
+      "output_path": "smart_marine_project/results/detected/20250929_185032_ppt.jpg"
+    },
+    {
+      "image_path": "smart_marine_project/static/uploads/20250929_021238_plastic_960.jpg",
+      "detections": [
+        {
+          "bbox": [
+            399.8843994140625,
+            172.41152954101562,
+            551.1814575195312,
+            431.5771179199219
+          ],
+          "confidence": 0.7411430478096008,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        }
+      ],
+      "num_detections": 1,
+      "processing_time": 0.086701,
+      "output_path": "smart_marine_project/results/detected/20250929_021238_plastic_960.jpg"
+    },
+    {
+      "image_path": "smart_marine_project/static/uploads/20250929_152911_Detail-Is-Plastic-Biodegradable.jpg",
+      "detections": [
+        {
+          "bbox": [
+            281.89508056640625,
+            316.86181640625,
+            597.8945922851562,
+            489.49627685546875
+          ],
+          "confidence": 0.9622862935066223,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        }
+      ],
+      "num_detections": 1,
+      "processing_time": 0.088877,
+      "output_path": "smart_marine_project/results/detected/20250929_152911_Detail-Is-Plastic-Biodegradable.jpg"
+    },
+    {
+      "image_path": "smart_marine_project/static/uploads/20250929_021214_dc_plastic_000069_Ig1O3gD6.jpg",
+      "detections": [
+        {
+          "bbox": [
+            441.9772644042969,
+            571.6492309570312,
+            457.0312194824219,
+            588.3650512695312
+          ],
+          "confidence": 0.6107359528541565,
+          "class_id": 0,
+          "class_name": "plastic"
+        },
+        {
+          "bbox": [
+            609.1766357421875,
+            620.6298828125,
+            637.546875,
+            639.9677734375
+          ],
+          "confidence": 0.6026474833488464,
+          "class_id": 0,
+          "class_name": "plastic"
+        }
+      ],
+      "num_detections": 2,
+      "processing_time": 0.088034,
+      "output_path": "smart_marine_project/results/detected/20250929_021214_dc_plastic_000069_Ig1O3gD6.jpg"
+    },
+    {
+      "image_path": "smart_marine_project/static/uploads/20250929_021229_plastic_940.jpg",
+      "detections": [],
+      "num_detections": 0,
+      "processing_time": 0.089132,
+      "output_path": "smart_marine_project/results/detected/20250929_021229_plastic_940.jpg"
+    },
+    {
+      "image_path": "smart_marine_project/static/uploads/20250929_152839_Image-examples-of-the-different-types-of-single-use-plastics-included-in-this-survey-a.png",
+      "detections": [
+        {
+          "bbox": [
+            375.94366455078125,
+            334.5736083984375,
+            606.6160888671875,
+            615.8614501953125
+          ],
+          "confidence": 0.871015191078186,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        },
+        {
+          "bbox": [
+            167.72938537597656,
+            317.7127380371094,
+            282.3868408203125,
+            436.4676208496094
+          ],
+          "confidence": 0.7926373481750488,
+          "class_id": 1,
+          "class_name": "plastic bottle"
+        },
+        {
+          "bbox": [
+            0.5377044677734375,
+            349.272705078125,
+            163.67762756347656,
+            523.6287231445312
+          ],
+          "confidence": 0.5253477096557617,
+          "class_id": 0,
+          "class_name": "plastic"
+        }
+      ],
+      "num_detections": 3,
+      "processing_time": 0.087137,
+      "output_path": "smart_marine_project/results/detected/20250929_152839_Image-examples-of-the-different-types-of-single-use-plastics-included-in-this-survey-a.png"
+    }
+  ],
+  "summary": {
+    "total_images_processed": 6,
+    "images_with_detections": 5,
+    "detection_rate": "83.3%",
+    "total_detections": 11,
+    "total_plastics": 3,
+    "total_bottles": 8,
+    "average_processing_time": "0.089s",
+    "total_processing_time": "0.537s"
+  },
+  "output_directory": "smart_marine_project/results/detected"
+}

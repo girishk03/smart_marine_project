@@ -1,0 +1,24 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.sqlite3
+/static/uploads/
+# Ignore datasets
+train/
+valid/
+test/
+
+# Ignore training outputs
+runs/
+
+# Ignore model weights
+*.pt
+
+# Ignore system files
+.DS_Store
+yolov5/
+.venv/
+*.pt
+__pycache__/

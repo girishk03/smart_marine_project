@@ -1,0 +1,44 @@
+# Smart Marine Project - Detection Configuration
+# =============================================
+
+# Model Configuration
+model:
+  path: "../models/ocean_waste_model_m2/weights/best.pt"
+  device: "auto"  # auto, cpu, cuda
+  input_size: 640
+  confidence_threshold: 0.3
+  iou_threshold: 0.45
+  max_detections: 1000
+
+# Detection Classes (Simplified)
+classes:
+  plastic: 0
+  plastic_bottle: 1
+
+# Visual Settings
+visualization:
+  line_thickness: 1
+  font_size: 12
+  show_confidence: true
+  show_class_names: true
+
+# Output Settings
+output:
+  save_images: true
+  save_results: true
+  results_format: "json"  # json, csv, txt
+  create_summary: true
+
+# Processing Settings
+processing:
+  batch_size: 1
+  num_workers: 4
+  cache_images: false
+  verbose: true
+
+# Class Mapping (Original to Simplified)
+class_mapping:
+  # All plastic types map to "plastic" (class 0)
+  plastic_types: [0, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18]
+  # Specific bottle types map to "plastic bottle" (class 1)
+  bottle_types: [8, 11, 14, 17]

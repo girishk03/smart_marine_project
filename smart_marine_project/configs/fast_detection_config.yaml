@@ -1,0 +1,46 @@
+# Smart Marine Project - Fast Detection Configuration
+# ===================================================
+
+# Model Configuration (Fast Processing)
+model:
+  path: "../models/ocean_waste_model_m2/weights/best.pt"
+  device: "auto"
+  input_size: 416  # Smaller input for speed
+  confidence_threshold: 0.3
+  iou_threshold: 0.45
+  max_detections: 500
+
+# Detection Classes
+classes:
+  plastic: 0
+  plastic_bottle: 1
+
+# Visual Settings (Minimal)
+visualization:
+  line_thickness: 1
+  font_size: 10
+  show_confidence: false
+  show_class_names: true
+  color_scheme: "minimal"
+
+# Output Settings (Essential Only)
+output:
+  save_images: true
+  save_results: false
+  results_format: "json"
+  create_summary: false
+
+# Processing Settings (Optimized for Speed)
+processing:
+  batch_size: 4
+  num_workers: 8
+  cache_images: false
+  verbose: false
+  save_logs: false
+
+# Performance Optimization
+performance:
+  use_half_precision: true
+  optimize_for_speed: true
+  skip_small_objects: true
+  max_processing_time: 30  # seconds per image

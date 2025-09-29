@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 9
+names: ['plastic', 'Bottle cap', 'Can', 'Juice Box', 'Juice box', 'Metal', 'Metal Waste', 'Undefined trash', 'Wood']
+
+roboflow:
+  workspace: student-wqxlz
+  project: ocean-waste-detection-n2n3a
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/student-wqxlz/ocean-waste-detection-n2n3a/dataset/1

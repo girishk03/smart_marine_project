@@ -1,0 +1,47 @@
+# Smart Marine Project - High Accuracy Detection Configuration
+# ============================================================
+
+# Model Configuration (High Accuracy Settings)
+model:
+  path: "../models/ocean_waste_model_m2/weights/best.pt"
+  device: "auto"
+  input_size: 640
+  confidence_threshold: 0.5  # Higher confidence for accuracy
+  iou_threshold: 0.45
+  max_detections: 1000
+
+# Detection Classes
+classes:
+  plastic: 0
+  plastic_bottle: 1
+
+# Visual Settings (Professional)
+visualization:
+  line_thickness: 2
+  font_size: 14
+  show_confidence: true
+  show_class_names: true
+  color_scheme: "professional"
+
+# Output Settings
+output:
+  save_images: true
+  save_results: true
+  results_format: "json"
+  create_summary: true
+  create_report: true
+
+# Processing Settings (Optimized for Accuracy)
+processing:
+  batch_size: 1
+  num_workers: 4
+  cache_images: true
+  verbose: true
+  save_logs: true
+
+# Quality Control
+quality_control:
+  min_detection_size: 20  # Minimum bounding box area
+  max_detection_size: 10000  # Maximum bounding box area
+  filter_small_objects: true
+  filter_large_objects: false
