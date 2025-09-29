@@ -96,15 +96,52 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+def download_model_from_hf():
+    """Download model from Hugging Face if not present"""
+    script_dir = os.path.dirname(__file__)
+    model_dir = os.path.join(script_dir, 'models/ocean_waste_model_m2/weights')
+    model_path = os.path.join(model_dir, 'best.pt')
+    
+    if not os.path.exists(model_path):
+        # Download from Hugging Face
+        model_url = "https://huggingface.co/SaiGirish45/smart-marine-model/resolve/main/best.pt"
+        
+        try:
+            os.makedirs(model_dir, exist_ok=True)
+            st.info("Downloading model from Hugging Face... (this may take a minute)")
+            
+            response = requests.get(model_url, stream=True)
+            response.raise_for_status()
+            
+            total_size = int(response.headers.get('content-length', 0))
+            progress_bar = st.progress(0)
+            
+            with open(model_path, 'wb') as f:
+                downloaded = 0
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        if total_size > 0:
+                            progress_bar.progress(downloaded / total_size)
+            
+            progress_bar.empty()
+            st.success("Model downloaded successfully!")
+        except Exception as e:
+            st.error(f"Failed to download model: {e}")
+            return None
+    
+    return model_path
+
 @st.cache_resource
 def load_detector():
     """Load the detection model with caching"""
     if PlasticDetector:
         try:
-            # Resolve model path relative to this file so it works from any CWD
-            script_dir = os.path.dirname(__file__)
-            model_path = os.path.join(script_dir, 'models/ocean_waste_model_m2/weights/best.pt')
-            if os.path.exists(model_path):
+            # Download model from Hugging Face if needed
+            model_path = download_model_from_hf()
+            
+            if model_path and os.path.exists(model_path):
                 detector = PlasticDetector(
                     model_path,
                     device='cpu',
@@ -115,7 +152,7 @@ def load_detector():
                 )
                 return detector, "✅ Detector loaded successfully!"
             else:
-                return None, f"❌ Model file not found at: {model_path}"
+                return None, f"❌ Model file not found"
         except Exception as e:
             return None, f"❌ Error loading detector: {e}"
     else:
