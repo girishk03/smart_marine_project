@@ -32,7 +32,34 @@ except ImportError:
     # Fallback to using torch.hub for YOLOv5 (works on deployed apps)
     print("Using torch.hub YOLOv5 (deployed mode)")
     attempt_load = None  # Will use torch.hub.load instead
-    from ultralytics.utils.ops import non_max_suppression
+    
+    # Implement non_max_suppression without ultralytics
+    def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=None, agnostic=False, multi_label=False, max_det=300):
+        """Simplified NMS implementation"""
+        import torchvision
+        output = []
+        for xi, x in enumerate(prediction):
+            x = x[x[:, 4] > conf_thres]
+            if not x.shape[0]:
+                output.append(torch.zeros((0, 6)))
+                continue
+            x[:, 5:] *= x[:, 4:5]
+            box = x[:, :4]
+            conf, j = x[:, 5:].max(1, keepdim=True)
+            x = torch.cat((box, conf, j.float()), 1)[conf.view(-1) > conf_thres]
+            if classes is not None:
+                x = x[(x[:, 5:6] == torch.tensor(classes, device=x.device)).any(1)]
+            n = x.shape[0]
+            if not n:
+                output.append(torch.zeros((0, 6)))
+                continue
+            boxes, scores = x[:, :4], x[:, 4]
+            i = torchvision.ops.nms(boxes, scores, iou_thres)
+            if i.shape[0] > max_det:
+                i = i[:max_det]
+            output.append(x[i])
+        return output
+    
     check_img_size = lambda x, s: x  # Simple passthrough
     
     def letterbox(img, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleFill=False, scaleup=True, stride=32):
