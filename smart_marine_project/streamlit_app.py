@@ -41,8 +41,15 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 # Import our detection system
 try:
     from plastic_detector import PlasticDetector
-except ImportError:
-    print("Warning: Could not import PlasticDetector. Using fallback detection.")
+except ImportError as e:
+    print(f"Warning: Could not import PlasticDetector: {e}")
+    import traceback
+    traceback.print_exc()
+    PlasticDetector = None
+except Exception as e:
+    print(f"Error importing PlasticDetector: {e}")
+    import traceback
+    traceback.print_exc()
     PlasticDetector = None
 
 # Page configuration
