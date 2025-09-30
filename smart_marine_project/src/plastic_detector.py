@@ -144,10 +144,13 @@ class PlasticDetector:
                 # Use local YOLOv5
                 model = attempt_load(self.model_path)
             else:
-                # Use torch.hub for cloud deployment
-                model = torch.load(self.model_path, map_location=self.device)
+                # Use torch.load for cloud deployment (PyTorch 2.6+ requires weights_only=False for YOLOv5)
+                model = torch.load(self.model_path, map_location=self.device, weights_only=False)
                 if isinstance(model, dict) and 'model' in model:
                     model = model['model']
+                # Handle EnsembleModel
+                if hasattr(model, 'model'):
+                    model = model.model[-1] if isinstance(model.model, list) else model.model
             
             model.to(self.device)
             model.eval()
