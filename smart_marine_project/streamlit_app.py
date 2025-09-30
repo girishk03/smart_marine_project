@@ -103,8 +103,8 @@ def download_model_from_hf():
     model_path = os.path.join(model_dir, 'best.pt')
     
     if not os.path.exists(model_path):
-        # Download from Hugging Face
-        model_url = "https://huggingface.co/SaiGirish45/smart-marine-model/resolve/main/best.pt"
+        # Download from Hugging Face (use blob URL for LFS files)
+        model_url = "https://huggingface.co/SaiGirish45/smart-marine-model/resolve/main/best.pt?download=true"
         
         try:
             os.makedirs(model_dir, exist_ok=True)
@@ -379,38 +379,76 @@ def main():
         if detector:
             detector.conf_threshold = live_conf
 
-        # Webcam via WebRTC
+        # Webcam - Simple snapshot approach (works on deployed apps)
+        if detector is not None:
+            st.subheader("Webcam Snapshot")
+            st.caption("Take a photo with your camera and detect plastics instantly")
+            
+            camera_photo = st.camera_input("Take a picture")
+            
+            if camera_photo is not None:
+                # Read the image
+                image = Image.open(camera_photo)
+                image_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+                
+                # Update detector confidence
+                detector.conf_threshold = live_conf
+                
+                # Detect objects
+                with st.spinner("Detecting plastics..."):
+                    detections, detection_info = detector.detect_objects(image_cv)
+                    result_image = detector.draw_detections(image_cv, detection_info, live_thick)
+                
+                # Display results
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.subheader("Original")
+                    st.image(image, use_container_width=True)
+                with col2:
+                    st.subheader(f"Detected ({len(detection_info)} objects)")
+                    st.image(cv2.cvtColor(result_image, cv2.COLOR_BGR2RGB), use_container_width=True)
+                
+                # Show detections
+                if detection_info:
+                    st.success(f"✅ Found {len(detection_info)} plastic object(s)")
+                    for i, det in enumerate(detection_info, 1):
+                        st.write(f"**{i}.** {det['class_name']} - Confidence: {det['confidence']:.2%}")
+                else:
+                    st.info("No plastic detected in this image")
+        
+        # Advanced: WebRTC for continuous video (local only)
         if HAS_WEBRTC and detector is not None:
-            st.subheader("Webcam")
-            rtc_config = RTCConfiguration({
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-            })
+            st.subheader("Advanced: Live Video Stream (Local Only)")
+            st.caption("⚠️ This feature works best when running locally")
+            
+            if st.checkbox("Enable live video stream"):
+                rtc_config = RTCConfiguration({
+                    "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+                })
 
-            class VideoProcessor:
-                def __init__(self):
-                    self.detector = detector
-                    self.live_thick = live_thick
+                class VideoProcessor:
+                    def __init__(self):
+                        self.detector = detector
+                        self.live_thick = live_thick
 
-                def recv(self, frame):  # av.VideoFrame
-                    img = frame.to_ndarray(format="bgr24")
-                    # Update detector confidence from slider
-                    self.detector.conf_threshold = live_conf
-                    detections, info = self.detector.detect_objects(img)
-                    out = self.detector.draw_detections(img, info, self.live_thick)
-                    import av  # local import to avoid top-level dependency error
-                    return av.VideoFrame.from_ndarray(out, format="bgr24")
+                    def recv(self, frame):  # av.VideoFrame
+                        img = frame.to_ndarray(format="bgr24")
+                        # Update detector confidence from slider
+                        self.detector.conf_threshold = live_conf
+                        detections, info = self.detector.detect_objects(img)
+                        out = self.detector.draw_detections(img, info, self.live_thick)
+                        import av  # local import to avoid top-level dependency error
+                        return av.VideoFrame.from_ndarray(out, format="bgr24")
 
-            webrtc_streamer(
-                key="smart-marine-live",
-                mode=WebRtcMode.SENDRECV,
-                rtc_configuration=rtc_config,
-                media_stream_constraints={"video": {"width": {"ideal": 1280}, "height": {"ideal": 720}}, "audio": False},
-                video_processor_factory=VideoProcessor,
-            )
+                webrtc_streamer(
+                    key="smart-marine-live",
+                    mode=WebRtcMode.SENDRECV,
+                    rtc_configuration=rtc_config,
+                    media_stream_constraints={"video": {"width": {"ideal": 1280}, "height": {"ideal": 720}}, "audio": False},
+                    video_processor_factory=VideoProcessor,
+                )
         else:
-            if not HAS_WEBRTC:
-                st.info("Install optional deps for webcam: pip install streamlit-webrtc av")
-            elif detector is None:
+            if not detector:
                 st.error("Detector not available. Please check model files.")
 
 
