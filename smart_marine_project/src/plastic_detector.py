@@ -172,7 +172,8 @@ class PlasticDetector:
                 model = attempt_load(self.model_path)
             else:
                 # Use torch.load directly (deployed mode)
-                model = torch.load(self.model_path, map_location=self.device)
+                # Set weights_only=False for YOLOv5 models (trusted source)
+                model = torch.load(self.model_path, map_location=self.device, weights_only=False)
                 if isinstance(model, dict) and 'model' in model:
                     model = model['model']
                 model = model.float()
