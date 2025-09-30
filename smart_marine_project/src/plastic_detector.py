@@ -21,15 +21,77 @@ from typing import List, Tuple, Dict, Optional
 import json
 from datetime import datetime
 
-# Add YOLOv5 repo root to path so we can import its local modules
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../yolov5'))
-
-# Import from local YOLOv5 repository (no 'yolov5.' prefix needed)
-from models.experimental import attempt_load
-from utils.general import check_img_size, non_max_suppression
-from utils.augmentations import letterbox
-from utils.torch_utils import select_device
-from utils.plots import Annotator, colors
+# Try to import from local YOLOv5 first, fallback to ultralytics
+try:
+    # Add YOLOv5 repo root to path so we can import its local modules
+    sys.path.append(os.path.join(os.path.dirname(__file__), '../../yolov5'))
+    from models.experimental import attempt_load
+    from utils.general import check_img_size, non_max_suppression, scale_coords
+    from utils.augmentations import letterbox
+    from utils.torch_utils import select_device
+    from utils.plots import Annotator, colors
+    USE_LOCAL_YOLO = True
+except ImportError:
+    # Fallback to ultralytics package (for cloud deployment)
+    from ultralytics.utils.torch_utils import select_device
+    import torchvision
+    USE_LOCAL_YOLO = False
+    
+    # Simple letterbox implementation for cloud
+    def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, stride=32):
+        shape = im.shape[:2]  # current shape [height, width]
+        if isinstance(new_shape, int):
+            new_shape = (new_shape, new_shape)
+        
+        r = min(new_shape[0] / shape[0], new_shape[1] / shape[1])
+        new_unpad = int(round(shape[1] * r)), int(round(shape[0] * r))
+        dw, dh = new_shape[1] - new_unpad[0], new_shape[0] - new_unpad[1]
+        
+        if auto:
+            dw, dh = np.mod(dw, stride), np.mod(dh, stride)
+        
+        dw /= 2
+        dh /= 2
+        
+        if shape[::-1] != new_unpad:
+            im = cv2.resize(im, new_unpad, interpolation=cv2.INTER_LINEAR)
+        top, bottom = int(round(dh - 0.1)), int(round(dh + 0.1))
+        left, right = int(round(dw - 0.1)), int(round(dw + 0.1))
+        im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
+        return im, r, (dw, dh)
+    
+    # Simple NMS implementation for cloud
+    def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, max_det=300):
+        output = []
+        for x in prediction:
+            x = x[x[:, 4] > conf_thres]
+            if not x.shape[0]:
+                output.append(torch.zeros((0, 6)))
+                continue
+            
+            x[:, 5:] *= x[:, 4:5]
+            box = x[:, :4]
+            conf, j = x[:, 5:].max(1, keepdim=True)
+            x = torch.cat((box, conf, j.float()), 1)[conf.view(-1) > conf_thres]
+            
+            if x.shape[0]:
+                boxes = x[:, :4]
+                scores = x[:, 4]
+                keep = torchvision.ops.nms(boxes, scores, iou_thres)
+                x = x[keep[:max_det]]
+            
+            output.append(x)
+        return output
+    
+    # Simple scale_coords for cloud
+    def scale_coords(img1_shape, coords, img0_shape):
+        gain = min(img1_shape[0] / img0_shape[0], img1_shape[1] / img0_shape[1])
+        pad = (img1_shape[1] - img0_shape[1] * gain) / 2, (img1_shape[0] - img0_shape[0] * gain) / 2
+        coords[:, [0, 2]] -= pad[0]
+        coords[:, [1, 3]] -= pad[1]
+        coords[:, :4] /= gain
+        coords[:, :4] = coords[:, :4].clamp(min=0)
+        return coords
 
 
 class PlasticDetector:
@@ -78,7 +140,15 @@ class PlasticDetector:
     def _load_model(self):
         """Load the YOLOv5 model"""
         try:
-            model = attempt_load(self.model_path)
+            if USE_LOCAL_YOLO:
+                # Use local YOLOv5
+                model = attempt_load(self.model_path)
+            else:
+                # Use torch.hub for cloud deployment
+                model = torch.load(self.model_path, map_location=self.device)
+                if isinstance(model, dict) and 'model' in model:
+                    model = model['model']
+            
             model.to(self.device)
             model.eval()
             print(f"✅ Model loaded successfully from {self.model_path}")
@@ -120,18 +190,7 @@ class PlasticDetector:
 
         # Rescale boxes from model img size to original image size
         if detections is not None and len(detections):
-            # Try to use YOLOv5's scale_coords if available; otherwise fall back to ratio scaling
-            try:
-                from utils.general import scale_coords  # type: ignore
-                detections[:, :4] = scale_coords((lb_img.shape[0], lb_img.shape[1]), detections[:, :4], img0.shape).round()
-            except Exception:
-                # Fallback: simple width/height ratio scaling
-                gain_w = img0.shape[1] / lb_img.shape[1]
-                gain_h = img0.shape[0] / lb_img.shape[0]
-                detections[:, 0] = detections[:, 0] * gain_w
-                detections[:, 2] = detections[:, 2] * gain_w
-                detections[:, 1] = detections[:, 1] * gain_h
-                detections[:, 3] = detections[:, 3] * gain_h
+            detections[:, :4] = scale_coords((lb_img.shape[0], lb_img.shape[1]), detections[:, :4], img0.shape).round()
 
         detection_info = self._process_detections(detections, image.shape)
         
