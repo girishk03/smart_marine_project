@@ -5,6 +5,8 @@ Smart Marine Project - Streamlit Web App
 
 A Streamlit-based web application for the Smart Marine plastic detection system.
 Easy to deploy and share with others.
+
+Version: 1.0.1
 """
 
 import streamlit as st

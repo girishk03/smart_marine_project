@@ -7,7 +7,7 @@ A comprehensive plastic waste detection system for marine environments.
 Detects and classifies plastic waste in images with high accuracy.
 
 Author: Smart Marine Project Team
-Version: 1.0.0
+Version: 1.0.1
 """
 
 import os
