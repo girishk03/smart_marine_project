@@ -151,10 +151,25 @@ def load_advanced_detector():
             return detector, f"✅ {DETECTOR_VERSION} Detector loaded successfully!"
         
         else:
-            return None, "❌ No detector available"
+            # Ultimate fallback: Use ultralytics YOLO directly
+            try:
+                from ultralytics import YOLO
+                # Download model if not present
+                download_model()
+                model = YOLO(MODEL_PATH)
+                return model, "✅ Ultralytics YOLO loaded successfully!"
+            except Exception as fallback_error:
+                return None, f"❌ All detectors failed: {fallback_error}"
             
     except Exception as e:
-        return None, f"❌ Error loading {DETECTOR_VERSION} detector: {e}"
+        # Try ultralytics as fallback
+        try:
+            from ultralytics import YOLO
+            download_model()
+            model = YOLO(MODEL_PATH)
+            return model, "✅ Ultralytics YOLO loaded (fallback)"
+        except:
+            return None, f"❌ Error loading detector: {e}"
 
 # Keep legacy function for backward compatibility
 @st.cache_resource
