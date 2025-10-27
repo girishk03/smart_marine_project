@@ -3159,7 +3159,7 @@ with tab1:
     if uploaded_file is not None:
         # Display uploaded image
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_container_width=True)
+        st.image(image, caption="Uploaded Image", width='stretch')
 
         if model is not None:
             if st.button("🔍 Detect Plastic Waste", type="primary"):
@@ -3169,7 +3169,7 @@ with tab1:
                 if detections:
                     # Draw detections on image
                     annotated_image = draw_detections(np.array(image), detections, line_thickness)
-                    st.image(annotated_image, caption="Detection Results", use_container_width=True)
+                    st.image(annotated_image, caption="Detection Results", width='stretch')
 
                     # Log detection
                     avg_conf = sum(d['confidence'] for d in detections) / len(detections)
@@ -3364,7 +3364,7 @@ with tab3:
                             # Show annotated image
                             image = Image.open([f for f in uploaded_files if f.name == result['filename']][0])
                             annotated_image = draw_detections(np.array(image), result['detections'], line_thickness)
-                            st.image(annotated_image, caption=f"Detection Results - {result['filename']}", use_container_width=True)
+                            st.image(annotated_image, caption=f"Detection Results - {result['filename']}", width='stretch')
 
                             # Show detection details
                             for det in result['detections']:
@@ -3462,7 +3462,7 @@ with tab4:
                 hovermode='x unified',
                 margin=dict(l=40, r=40, t=40, b=40)
             )
-            st.plotly_chart(fig_timeline, use_container_width=True)
+            st.plotly_chart(fig_timeline, width='stretch')
         
         with col_right:
             # Confidence Distribution
@@ -3496,7 +3496,7 @@ with tab4:
                     ),
                     margin=dict(l=40, r=40, t=40, b=40)
                 )
-                st.plotly_chart(fig_conf, use_container_width=True)
+                st.plotly_chart(fig_conf, width='stretch')
             else:
                 st.info("No confidence data available yet")
 
@@ -3517,7 +3517,7 @@ with tab4:
         # Show last 10 entries
         st.dataframe(
             display_df.tail(10).iloc[::-1],
-            use_container_width=True,
+            width='stretch',
             hide_index=True
         )
 
@@ -3533,7 +3533,7 @@ with tab4:
                 data=csv,
                 file_name=f"detection_history_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                 mime="text/csv",
-                use_container_width=True
+                width='stretch'
             )
         
         with col_export2:
@@ -3544,7 +3544,7 @@ with tab4:
                 data=json_str,
                 file_name=f"detection_history_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
                 mime="application/json",
-                use_container_width=True
+                width='stretch'
             )
 
         # Clear History Button
