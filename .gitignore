@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Model Files (too large for GitHub)
+*.pt
+*.pth
+*.onnx
+*.weights
+
+# Datasets (too large)
+train/
+valid/
+test/
+roboflow.zip
+*.zip
+
+# Training Outputs
+runs/
+yolov5/
+
+# Logs
+*.log
+streamlit_debug.log
+
+# Archives
+_archive/
+*_backup/
+
+# Temporary Files
+*.tmp
+.cache/

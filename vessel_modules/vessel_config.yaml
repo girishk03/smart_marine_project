@@ -1,0 +1,81 @@
+# Smart Marine Vessel Configuration
+# ==================================
+
+# Simulation Settings
+simulation:
+  map_center_lat: 12.9500  # Deep Bay of Bengal - NO LAND VISIBLE
+  map_center_lon: 80.3500  # Far offshore - PURE OCEAN WATER
+  map_zoom: 16  # Closer zoom to see water details
+  boat_speed_mps: 1.5  # meters per second
+  detection_range_m: 50  # detection range in meters
+  collection_range_m: 2  # range to collect plastic
+  spawn_plastic_count: 10  # number of plastic objects in simulation
+
+# GPS Navigation
+navigation:
+  waypoint_threshold_m: 2.0  # distance to consider waypoint reached
+  heading_tolerance_deg: 5.0  # acceptable heading error
+  max_speed_mps: 2.0
+  min_speed_mps: 0.5
+  turn_rate_deg_per_sec: 30.0
+  obstacle_distance_m: 3.0  # stop if obstacle closer than this
+
+# Detection Settings
+detection:
+  confidence_threshold: 0.15  # lower for marine environment
+  iou_threshold: 0.40
+  max_detections: 20
+  camera_fov_deg: 60  # field of view
+  camera_range_m: 30  # max detection distance
+
+# Collection Mechanism
+collection:
+  net_deploy_time_sec: 2.0
+  net_retract_time_sec: 1.5
+  collection_confirm_delay_sec: 0.5
+  sensor_threshold: 100  # load cell or IR threshold
+
+# Hardware Pins (Raspberry Pi GPIO)
+hardware:
+  # Motor Control
+  motor_left_forward: 17
+  motor_left_backward: 18
+  motor_right_forward: 22
+  motor_right_backward: 23
+  motor_pwm_left: 12
+  motor_pwm_right: 13
+  
+  # Servo Control
+  net_servo_pin: 16
+  net_deploy_angle: 90
+  net_retract_angle: 0
+  
+  # Sensors
+  ultrasonic_trigger: 24
+  ultrasonic_echo: 25
+  collection_sensor_pin: 26
+  
+  # GPS Module
+  gps_serial_port: "/dev/ttyAMA0"
+  gps_baud_rate: 9600
+  
+  # Compass
+  compass_i2c_address: 0x1E
+
+# Data Logging
+logging:
+  enable: true
+  log_directory: "vessel_logs"
+  save_detections: true
+  save_gps_track: true
+  save_collections: true
+  export_format: "csv"  # csv or json
+
+# Dashboard Settings
+dashboard:
+  update_interval_ms: 100
+  map_update_interval_ms: 500
+  show_detection_boxes: true
+  show_gps_trail: true
+  show_plastic_markers: true
+  trail_max_points: 100
