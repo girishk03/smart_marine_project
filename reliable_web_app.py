@@ -113,6 +113,20 @@ def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
 # Model path
 MODEL_PATH = 'yolov5m.pt'  # Original YOLOv5 - better for marine debris detection
 
+def download_model():
+    """Download YOLOv5m model if not present"""
+    if not os.path.exists(MODEL_PATH):
+        st.info("📥 Downloading YOLOv5m model (first time only)...")
+        try:
+            import urllib.request
+            url = 'https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5m.pt'
+            urllib.request.urlretrieve(url, MODEL_PATH)
+            st.success("✅ Model downloaded successfully!")
+        except Exception as e:
+            st.error(f"❌ Failed to download model: {e}")
+            return False
+    return True
+
 # Use singleton pattern to ensure model loads only once
 @st.cache_resource
 def load_advanced_detector():
@@ -146,6 +160,10 @@ def load_advanced_detector():
 @st.cache_resource
 def load_model():
     """Legacy YOLOv5 model loader - kept for compatibility"""
+    # Auto-download model if not present
+    if not download_model():
+        return None, f"❌ Model download failed"
+    
     if not os.path.exists(MODEL_PATH):
         return None, f"❌ Model not found: {MODEL_PATH}"
 
@@ -166,6 +184,10 @@ def load_model():
 def load_webcam_model():
     """Load original YOLOv5 model for better webcam detection"""
     webcam_model_path = 'yolov5m.pt'
+    
+    # Auto-download model if not present
+    if not download_model():
+        return None, f"❌ Model download failed"
     
     if not os.path.exists(webcam_model_path):
         return None, f"❌ Webcam model not found: {webcam_model_path}"
