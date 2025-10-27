@@ -260,6 +260,34 @@ def detect_plastic_advanced(image, detector, conf_threshold=0.25):
 def detect_plastic(image, model, conf_threshold=0.08, filter_faces=True):
     """Optimized plastic detection with smart filtering"""
     try:
+        # Check if this is ultralytics YOLO (simpler interface)
+        if hasattr(model, 'predict'):
+            # Ultralytics YOLO - simple and reliable
+            results = model.predict(image, conf=conf_threshold, verbose=False)
+            detections = []
+            
+            for result in results:
+                boxes = result.boxes
+                for box in boxes:
+                    x1, y1, x2, y2 = box.xyxy[0].cpu().numpy()
+                    conf = float(box.conf[0])
+                    cls = int(box.cls[0])
+                    
+                    # Get class name (bottle, cup, etc.)
+                    class_name = model.names[cls] if hasattr(model, 'names') else 'plastic'
+                    
+                    # Filter for bottle-related classes
+                    bottle_classes = ['bottle', 'cup', 'wine glass', 'vase', 'bowl']
+                    if any(bc in class_name.lower() for bc in bottle_classes):
+                        detections.append({
+                            'bbox': [float(x1), float(y1), float(x2), float(y2)],
+                            'confidence': conf,
+                            'class_id': cls,
+                            'class_name': 'plastic'
+                        })
+            
+            return detections
+        
         # Ensure YOLOv5 components are imported
         if not YOLO_AVAILABLE:
             import_yolov5()
@@ -3157,6 +3185,28 @@ with st.sidebar:
 
     if not WEBCAM_AVAILABLE:
         st.warning("📹 Webcam features not available. Install: pip install streamlit-webrtc av")
+
+# Load model at startup
+st.markdown("### 🤖 AI Model Status")
+with st.spinner("Loading AI model..."):
+    try:
+        # Try ultralytics YOLO directly (most reliable)
+        from ultralytics import YOLO
+        download_model()
+        model = YOLO(MODEL_PATH)
+        st.success("✅ Ultralytics YOLO loaded successfully!")
+    except Exception as e:
+        # Try advanced detector
+        model, status = load_advanced_detector()
+        if model is None:
+            # Try legacy model
+            model, status = load_model()
+        
+        if model is not None:
+            st.success(status)
+        else:
+            st.error(f"❌ {status}")
+            model = None
 
 # Main content area
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["📸 Single Image", "📹 Live Webcam", "📚 Batch Upload", "📊 Analytics", "🚤 Autonomous Mode"])
