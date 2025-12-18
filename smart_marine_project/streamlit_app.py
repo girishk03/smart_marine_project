@@ -318,14 +318,14 @@ def download_model_from_hf():
             
             # Download the model file
             downloaded_path = hf_hub_download(
-                repo_id="girishk03/smart-marine-yolov5",  # Your Hugging Face repo
+                repo_id="sudeeksha0724/smart-marine-yolov5",  # Your Hugging Face repo
                 filename="best_colab.pt",
                 cache_dir=model_dir,
                 local_dir=model_dir,
                 local_dir_use_symlinks=False
             )
             
-            print(f"✅ Model downloaded successfully from Hugging Face!")
+            print(f" Model downloaded successfully from Hugging Face!")
             return downloaded_path
             
         except ImportError:
@@ -335,7 +335,7 @@ def download_model_from_hf():
             import requests
             
             # Hugging Face direct download URL
-            hf_url = "https://huggingface.co/girishk03/smart-marine-yolov5/resolve/main/best_colab.pt"
+            hf_url = "https://huggingface.co/sudeeksha0724/smart-marine-yolov5/resolve/main/best_colab.pt"
             
             response = requests.get(hf_url, stream=True)
             response.raise_for_status()
