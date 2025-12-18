@@ -3,9 +3,9 @@
 # This dataset contains ONLY plastic waste images
 # Metal, wood, and concrete have been removed
 
-train: /Users/saigirish050704/Desktop/smart_mairine_project/train_plastic_only/images
-val: /Users/saigirish050704/Desktop/smart_mairine_project/valid_plastic_only/images
-test: /Users/saigirish050704/Desktop/smart_mairine_project/valid_plastic_only/images
+train: train_plastic_only/images
+val: valid_plastic_only/images
+test: valid_plastic_only/images
 
 # Only 1 class now (plastic)
 nc: 1

@@ -1,6 +1,6 @@
 weights: yolov5m.pt
 cfg: ''
-data: /Users/saigirish050704/Desktop/smart mairine project/data.yaml
+data: data.yaml
 hyp:
   lr0: 0.01
   lrf: 0.01
@@ -51,7 +51,7 @@ single_cls: false
 optimizer: SGD
 sync_bn: false
 workers: 8
-project: /Users/saigirish050704/Desktop/smart mairine project/runs/train
+project: runs/train
 name: ocean_waste_model_m
 exist_ok: false
 quad: false
@@ -69,4 +69,4 @@ bbox_interval: -1
 artifact_alias: latest
 ndjson_console: false
 ndjson_file: false
-save_dir: /Users/saigirish050704/Desktop/smart mairine project/runs/train/ocean_waste_model_m2
+save_dir: runs/train/ocean_waste_model_m2

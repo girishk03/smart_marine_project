@@ -272,7 +272,7 @@ The Smart Marine Project uses YOLOv5-based deep learning to detect plastic waste
 
 1. **Clone/Navigate to the project**
    ```bash
-   cd /Users/saigirish050704/Desktop/smart_mairine_project
+   cd smart_mairine_project
    ```
 
 2. **Create and activate virtual environment**
@@ -461,7 +461,7 @@ uvicorn smart_marine_project.api_server:app --port 8001
 ### All-in-One Setup
 ```bash
 # Navigate to project
-cd /Users/saigirish050704/Desktop/smart_mairine_project
+cd smart_mairine_project
 
 # Activate venv
 source .venv/bin/activate
