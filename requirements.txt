@@ -8,3 +8,5 @@ torch>=1.9.0
 torchvision>=0.10.0
 plotly>=5.0.0
 ultralytics>=8.0.0
+streamlit-webrtc>=0.45.0
+av>=9.0.0
