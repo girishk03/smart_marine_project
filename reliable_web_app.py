@@ -38,10 +38,7 @@ import logging
 logging.getLogger('yolov5').setLevel(logging.ERROR)
 logging.getLogger('torch').setLevel(logging.ERROR)
 
-# Add YOLOv5 to path
-yolov5_path = os.path.join(os.path.dirname(__file__), 'yolov5')
-if yolov5_path not in sys.path:
-    sys.path.insert(0, yolov5_path)
+# YOLOv5 local path not used in deployment
 
 # Lazy import YOLOv5 components
 YOLO_AVAILABLE = False
