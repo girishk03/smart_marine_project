@@ -56,3 +56,4 @@ _archive/
 *.pt
 venv/
 __pycache__/
+*.pt
