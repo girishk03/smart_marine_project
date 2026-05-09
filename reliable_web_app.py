@@ -111,17 +111,7 @@ def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
 MODEL_PATH = 'yolov5m.pt'  # Original YOLOv5 - better for marine debris detection
 
 def download_model():
-    """Download YOLOv5m model if not present"""
-    if not os.path.exists(MODEL_PATH):
-        st.info("📥 Downloading YOLOv5m model (first time only)...")
-        try:
-            import urllib.request
-            url = 'https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5m.pt'
-            urllib.request.urlretrieve(url, MODEL_PATH)
-            st.success("✅ Model downloaded successfully!")
-        except Exception as e:
-            st.error(f"❌ Failed to download model: {e}")
-            return False
+    """Use ultralytics to get model - no manual download needed"""
     return True
 
 # Use singleton pattern to ensure model loads only once
