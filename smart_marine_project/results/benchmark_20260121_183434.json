@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-01-21T18:34:34.485565",
+  "source": {
+    "type": "video",
+    "source": "/Users/saigirish050704/Downloads/Untitled file.mp4",
+    "resolved_path": "/Users/saigirish050704/Downloads/Untitled file.mp4",
+    "width": 150,
+    "height": 150,
+    "input_fps": 60.0,
+    "stride": 1
+  },
+  "config": {
+    "model_path": "/Users/saigirish050704/CascadeProjects/windsurf-project-4/smart_mairine_project/smart_marine_project/models/ocean_waste_model_m2/weights/best.pt",
+    "device": "cpu",
+    "conf_threshold": 0.3,
+    "iou_threshold": 0.3,
+    "img_size": 640,
+    "warmup": 5,
+    "max_seconds": 600.0,
+    "rss_sample_every_n": 30
+  },
+  "hardware": {
+    "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "processor": "arm",
+    "torch_version": "2.8.0",
+    "cuda_available": false,
+    "opencv_version": "4.12.0"
+  },
+  "system": {
+    "psutil_available": true,
+    "cpu_percent_before": 7.0,
+    "cpu_percent_after": 1.0
+  },
+  "results": {
+    "frames_processed": 355,
+    "total_seconds": 32.9662561416626,
+    "fps": 10.768587081119978,
+    "latency_ms": {
+      "mean": 92.79168222991514,
+      "stdev": 8.856803190882092,
+      "p50": 92.47994422912598,
+      "p90": 99.43342208862305,
+      "p95": 103.54349613189697,
+      "p99": 131.86678409576413
+    },
+    "detections_per_frame": {
+      "mean": 0,
+      "max": 0
+    },
+    "errors": {
+      "count": 0,
+      "rate": 0.0
+    },
+    "resources": {
+      "psutil_available": true,
+      "rss_before_bytes": 830521344,
+      "rss_after_bytes": 839237632,
+      "rss_peak_bytes": 839237632,
+      "rss_samples_count": 12,
+      "rss_samples_every_n_frames": 30
+    }
+  }
+}
