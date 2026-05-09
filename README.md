@@ -11,6 +11,27 @@ An advanced AI system for detecting and tracking plastic waste in marine environ
 
 ---
 
+
+## 📸 Screenshots
+
+### Dashboard & Detection
+![Single Image Detection](docs/screenshots/01-single-image-detection.png)
+*Upload interface with marine-themed UI*
+
+![Detection Result](docs/screenshots/02-detection-result.png)
+*YOLOv5m detecting plastic bottle with 0.72 confidence*
+
+![Live Webcam](docs/screenshots/03-live-webcam.png)
+*Real-time webcam detection mode*
+
+![Analytics Dashboard](docs/screenshots/04-analytics-dashboard.png)
+*Analytics dashboard with detection timeline and confidence distribution*
+
+![GPS Navigation](docs/screenshots/05-gps-navigation.png)
+*Autonomous GPS navigation and debris collection mission*
+
+---
+
 ## ✨ Features
 
 ### 🎯 Core Detection
