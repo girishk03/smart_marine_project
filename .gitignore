@@ -52,3 +52,7 @@ _archive/
 # Temporary Files
 *.tmp
 .cache/
+.DS_Store
+*.pt
+venv/
+__pycache__/

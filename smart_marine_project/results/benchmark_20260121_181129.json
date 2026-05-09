@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-01-21T18:11:29.498448",
+  "source": {
+    "type": "video",
+    "source": "/Users/saigirish050704/Downloads/Untitled file.mp4",
+    "width": 150,
+    "height": 150,
+    "input_fps": 60.0,
+    "stride": 1,
+    "resolved_path": "/Users/saigirish050704/Downloads/Untitled file.mp4"
+  },
+  "config": {
+    "model_path": "/Users/saigirish050704/CascadeProjects/windsurf-project-4/smart_mairine_project/smart_marine_project/models/ocean_waste_model_m2/weights/best.pt",
+    "device": "cpu",
+    "conf_threshold": 0.3,
+    "iou_threshold": 0.3,
+    "img_size": 640,
+    "warmup": 5
+  },
+  "hardware": {
+    "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+    "python": "3.13.7",
+    "processor": "arm",
+    "torch_version": "2.8.0",
+    "cuda_available": false,
+    "opencv_version": "4.12.0"
+  },
+  "system": {
+    "psutil_available": true,
+    "cpu_percent_before": 5.1,
+    "cpu_percent_after": 1.0
+  },
+  "results": {
+    "frames_processed": 200,
+    "total_seconds": 17.388706922531128,
+    "fps": 11.501717804033682,
+    "latency_ms": {
+      "mean": 86.92503929138184,
+      "stdev": 3.4387251828332572,
+      "p50": 86.03096008300781,
+      "p90": 90.82493782043457,
+      "p95": 92.70433187484741,
+      "p99": 99.66539859771729
+    },
+    "detections_per_frame": {
+      "mean": 0,
+      "max": 0
+    },
+    "resources": {
+      "psutil_available": true,
+      "rss_before_bytes": 836108288,
+      "rss_after_bytes": 838369280,
+      "rss_peak_bytes": 838369280
+    }
+  }
+}
