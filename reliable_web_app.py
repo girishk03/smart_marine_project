@@ -69,7 +69,7 @@ def import_yolov5():
             letterbox = _letterbox
             YOLO_AVAILABLE = True
         except ImportError as e:
-            st.error(f"YOLOv5 import error: {e}")
+            print(f"YOLOv5 local import not available: {e}")
             YOLO_AVAILABLE = False
 
 # Import the advanced plastic detector (YOLOv8)
