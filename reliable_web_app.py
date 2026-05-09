@@ -108,7 +108,7 @@ def scale_coords(img1_shape, coords, img0_shape, ratio_pad=None):
     return coords
 
 # Model path
-MODEL_PATH = 'yolov5m.pt'  # Original YOLOv5 - better for marine debris detection
+MODEL_PATH = 'yolov8n.pt'  # YOLOv8 nano - fast and works with ultralytics
 
 def download_model():
     """Use ultralytics to get model - no manual download needed"""
