@@ -2,6 +2,8 @@
 
 **AI-Powered Plastic Waste Detection System for Marine Conservation**
 
+[**🌊 Live Demo**](https://smart-marine-project.onrender.com) | [**💻 GitHub**](https://github.com/girishk03/smart_marine_project)
+
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![YOLOv5](https://img.shields.io/badge/YOLOv5-Ultralytics-green)](https://github.com/ultralytics/yolov5)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-red)](https://streamlit.io/)
