@@ -2,7 +2,10 @@
 
 **AI-Powered Plastic Waste Detection System for Marine Conservation**
 
-[**🌊 Live Demo**](https://smart-marine-project.onrender.com) | [**💻 GitHub**](https://github.com/girishk03/smart_marine_project)
+> ⚠️ **Note**: This project is optimized for local deployment due to YOLOv5 model size (~85MB) and GPU acceleration requirements. See [Quick Start](#-quick-start) to run locally in under 2 minutes.
+
+
+[**💻 GitHub**](https://github.com/girishk03/smart_marine_project) | [**📖 Local Setup Guide**](#-quick-start)
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![YOLOv5](https://img.shields.io/badge/YOLOv5-Ultralytics-green)](https://github.com/ultralytics/yolov5)
