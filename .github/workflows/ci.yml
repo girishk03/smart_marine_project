@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install core deps
+        run: |
+          pip install streamlit numpy Pillow opencv-python-headless pandas plotly
+      - name: Check app syntax
+        run: |
+          python -m py_compile reliable_web_app.py
+          python -m py_compile plastic_detector.py
+          echo "✅ All files pass syntax check"
