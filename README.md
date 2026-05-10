@@ -1,4 +1,5 @@
 # 🌊 Smart Marine Project
+![CI](https://github.com/girishk03/smart_marine_project/actions/workflows/ci.yml/badge.svg)
 
 **AI-Powered Plastic Waste Detection System for Marine Conservation**
 
