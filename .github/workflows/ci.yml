@@ -12,11 +12,29 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install core deps
+      - name: Install dependencies
         run: |
-          pip install streamlit numpy Pillow opencv-python-headless pandas plotly
-      - name: Check app syntax
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+      - name: Check app syntax and imports
         run: |
           python -m py_compile reliable_web_app.py
           python -m py_compile plastic_detector.py
-          echo "✅ All files pass syntax check"
+          python -c "import reliable_web_app; import plastic_detector"
+      - name: Smoke test Streamlit startup
+        run: |
+          streamlit run reliable_web_app.py \
+            --server.headless=true \
+            --server.fileWatcherType=none \
+            --server.port=8765 &
+          app_pid=$!
+          trap 'kill "$app_pid"' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8765/_stcore/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - name: Run tests
+        run: pytest -q smart_marine_project/tests

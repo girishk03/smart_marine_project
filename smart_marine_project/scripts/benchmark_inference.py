@@ -279,6 +279,24 @@ def _load_video_frames(source: str, max_frames: int, stride: int) -> Tuple[List[
     return frames, meta
 
 
+def _validate_video_source(source: str) -> None:
+    if not os.path.exists(source):
+        raise FileNotFoundError(
+            f"Video file not found: {source}. "
+            "Pass a real file path (e.g. /Users/<you>/Videos/drone.mp4)."
+        )
+
+    cap = cv2.VideoCapture(source)
+    try:
+        if not cap.isOpened():
+            raise RuntimeError(
+                f"Could not open video source: {source}. "
+                "If this is a valid file, your OpenCV build may lack the codec for that container."
+            )
+    finally:
+        cap.release()
+
+
 def _load_webcam_frames(device_index: int, max_frames: int) -> Tuple[List[np.ndarray], Dict[str, Any]]:
     cap = cv2.VideoCapture(device_index)
     if not cap.isOpened():
@@ -340,6 +358,11 @@ def main() -> int:
     )
 
     args = parser.parse_args()
+
+    # Validate user input before model availability so input errors remain
+    # actionable even when optional benchmark weights are not installed.
+    if args.video:
+        _validate_video_source(args.video)
 
     model_path = os.path.abspath(args.model)
     if not os.path.exists(model_path):
