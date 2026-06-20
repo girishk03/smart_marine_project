@@ -1,275 +1,179 @@
-# 🌊 Smart Marine Project
-![CI](https://github.com/girishk03/smart_marine_project/actions/workflows/ci.yml/badge.svg)
+# Smart Marine Project
 
-**AI-Powered Plastic Waste Detection System for Marine Conservation**
+[![CI](https://github.com/girishk03/smart_marine_project/actions/workflows/ci.yml/badge.svg)](https://github.com/girishk03/smart_marine_project/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/Python-3.11-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/Code-MIT-yellow)](LICENSE)
 
-> ⚠️ **Note**: This project is optimized for local deployment due to YOLOv5 model size (~85MB) and GPU acceleration requirements. See [Quick Start](#-quick-start) to run locally in under 2 minutes.
+An experimental computer-vision dashboard for exploring marine-debris detection workflows, result visualization, and simulated vessel missions.
 
+## Project Overview
 
-[**💻 GitHub**](https://github.com/girishk03/smart_marine_project) | [**📖 Local Setup Guide**](#-quick-start)
+Smart Marine Project combines a Streamlit interface with an Ultralytics object detector. Users can inspect images, process batches, experiment with webcam input, review session analytics, export detection history, and explore a software-only vessel simulator.
 
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
-[![YOLOv5](https://img.shields.io/badge/YOLOv5-Ultralytics-green)](https://github.com/ultralytics/yolov5)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.28%2B-red)](https://streamlit.io/)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+This repository is a prototype and research portfolio project. It is not a production monitoring system or an autonomous-vessel controller.
 
-An advanced AI system for detecting and tracking plastic waste in marine environments using deep learning and computer vision.
+## Problem Statement
 
----
+Reviewing marine imagery manually is slow. Object detection can help investigators prioritize images that may contain bottles, cups, or similar debris. However, a general-purpose object detector cannot determine material composition reliably, so its output must remain advisory and subject to human review.
 
+## What This Project Actually Does
 
-## 📸 Screenshots
+- Runs a pretrained YOLOv8n model in the primary Streamlit application.
+- Treats selected COCO object classes—such as `bottle`, `cup`, `wine glass`, `bowl`, and `vase`—as possible debris candidates.
+- Applies heuristic class and geometry filtering to selected inference paths.
+- Supports single-image, batch-image, and browser webcam workflows.
+- Displays session-level analytics and exports detection history as CSV or JSON.
+- Simulates GPS positions, navigation, debris collection, and vessel telemetry in software.
 
-### Dashboard & Detection
-![Single Image Detection](docs/screenshots/01-single-image-detection.png)
-*Upload interface with marine-themed UI*
+## What It Does Not Claim
 
-![Detection Result](docs/screenshots/02-detection-result.png)
-*YOLOv5m detecting plastic bottle with 0.72 confidence*
+- It does not identify plastic material composition directly.
+- It does not provide a verified accuracy score for the current runtime pipeline.
+- It does not ship the historical custom YOLOv5m weights or training dataset.
+- It does not demonstrate physical vessel control, real GPS hardware integration, or field deployment.
+- It should not make cleanup, safety, navigation, or enforcement decisions without human review.
 
-![Live Webcam](docs/screenshots/03-live-webcam.png)
-*Real-time webcam detection mode*
+## Live / Demo Status
 
-![Analytics Dashboard](docs/screenshots/04-analytics-dashboard.png)
-*Analytics dashboard with detection timeline and confidence distribution*
+The supported path is local execution. Render configuration is included, but no continuously available public deployment is claimed. The runtime model may be downloaded by Ultralytics on first use, requiring network access and additional startup time.
 
-![GPS Navigation](docs/screenshots/05-gps-navigation.png)
-*Autonomous GPS navigation and debris collection mission*
+## Screenshots
 
----
+| Workflow | Preview |
+| --- | --- |
+| Single-image interface | ![Single-image interface](docs/screenshots/01-single-image-detection.png) |
+| Example detection result | ![Example detection result](docs/screenshots/02-detection-result.png) |
+| Webcam interface | ![Webcam interface](docs/screenshots/03-live-webcam.png) |
+| Session analytics | ![Session analytics](docs/screenshots/04-analytics-dashboard.png) |
+| Vessel simulation | ![Vessel simulation](docs/screenshots/05-gps-navigation.png) |
 
-## ✨ Features
+Screenshots illustrate application workflows; they are not evaluation evidence.
 
-### 🎯 Core Detection
-- **Real-time Webcam Detection** - Live plastic detection from webcam feed
-- **Single Image Analysis** - Upload and analyze individual images
-- **Batch Processing** - Process multiple images simultaneously
-- **Any Orientation** - Detects bottles in vertical, horizontal, or tilted positions
+## Architecture
 
-### 🧠 Smart AI
-- **YOLOv5m Model** - 21.2M parameters, optimized for marine debris
-- **Confidence Boosting** - Intelligent confidence enhancement (6x boost)
-- **Smart Filtering** - Removes false positives (humans, furniture, etc.)
-- **Multi-Class Support** - Detects bottles, cups, containers
+```mermaid
+flowchart LR
+    User["User"] --> App["Streamlit App"]
+    App --> Runtime["YOLOv8n Runtime Detector"]
+    Runtime --> Filter["Heuristic Filtering"]
+    Filter --> Dashboard["Dashboard"]
+    Filter --> Exports["CSV / JSON Exports"]
+    App --> Simulator["Vessel Simulator"]
+```
 
-### 📊 Analytics
-- **Detection Statistics** - Track total detections and confidence scores
-- **Session History** - View detection timeline and patterns
-- **Data Export** - Export results as CSV/JSON
-- **Visual Charts** - Interactive Plotly visualizations
+## Runtime Model
 
-### 🚤 Advanced Features
-- **Autonomous Vessel Mode** - GPS navigation and collection tracking
-- **Marine Theme UI** - Beautiful ocean-themed interface
-- **Multiple Sensitivity Modes** - Beach, Ultra-Sensitive, Normal, Expert
-- **Custom Animations** - Boat and wave animations
+The main application loads `yolov8n.pt` through the Ultralytics package. If the file is absent, Ultralytics may download the pretrained model automatically. No runtime weight file is committed to this repository.
 
----
+The runtime detector is pretrained on COCO object categories. It is not a custom material classifier. The application maps selected object categories to a display label of `plastic`, which is a project heuristic rather than a model prediction about material.
 
-## 🚀 Quick Start
+## Historical Training Notes
+
+The repository contains plots and `results.csv` from a historical 50-epoch YOLOv5m experiment. Its best recorded values include mAP@0.5 of approximately `0.208` and mAP@0.5:0.95 of approximately `0.144`. These artifacts do not establish performance for the current YOLOv8n runtime pipeline.
+
+The historical weights, dataset snapshot, and complete runnable training workflow are absent. Consequently, the experiment is not reproducible from this repository and is retained only as historical context.
+
+## Observed Performance
+
+Six committed CPU benchmark reports record approximately `10.77–18.68 FPS` and mean inference latency of approximately `53.5–92.8 ms` on the recorded Apple CPU environment. Tail latency exceeded 100 ms in some runs. These reports recorded zero detections per frame, so they are useful as limited timing observations—not end-to-end detection-performance evidence.
+
+No supported GPU benchmark is included.
+
+## Detection Logic
+
+1. The runtime model produces general COCO object detections.
+2. The application keeps selected container-like classes as possible debris candidates.
+3. Some inference paths apply heuristic filters based on class, geometry, position, and confidence.
+4. A legacy YOLOv5 path boosts displayed confidence by up to 6×, capped at 0.95; very low scores use a smaller multiplier.
+5. Results are shown for operator review and may be exported from session history.
+
+Confidence boosting is a presentation heuristic. It is not probability calibration and must not be interpreted as improved model accuracy.
+
+## Simulator Module
+
+`vessel_modules/` provides a software simulator for GPS coordinates, navigation state, camera imagery, collection counts, and telemetry. It is intended for UI and workflow experimentation. It does not communicate with motors, autopilots, GPS receivers, or other vessel hardware.
+
+## Setup Guide
 
 ### Prerequisites
-- Python 3.8 or higher
-- Webcam (for live detection)
-- 4GB RAM minimum
 
-### Installation
+- Python 3.11 recommended
+- Network access for the first model download
+- A webcam and browser permission for webcam mode
 
-1. **Clone the repository**
 ```bash
 git clone https://github.com/girishk03/smart_marine_project.git
 cd smart_marine_project
-```
-
-2. **Install dependencies**
-```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. **Download YOLOv5 model** (if not included)
-```bash
-# Model will auto-download on first run
-# Or manually download yolov5m.pt from Ultralytics
+Windows activation:
+
+```powershell
+.venv\Scripts\activate
 ```
 
-4. **Run the application**
+## Run Streamlit App
+
 ```bash
 streamlit run reliable_web_app.py
 ```
 
-5. **Open browser**
-```
-http://localhost:8501
-```
+Open `http://localhost:8501`. The first run may download YOLOv8n weights. Webcam behavior depends on browser permissions and local media support.
 
----
+## Testing
 
-## 📖 Usage
+Run the package tests with:
 
-### 1. Single Image Detection
-- Click **"📸 Single Image"** tab
-- Upload an image
-- Adjust confidence threshold (default: 0.15)
-- Click **"🔍 Detect Plastic"**
-
-### 2. Live Webcam
-- Click **"📹 Live Webcam"** tab
-- Allow camera permissions
-- Hold plastic bottle in any orientation
-- Real-time detection with confidence scores
-
-### 3. Batch Processing
-- Click **"📁 Batch Upload"** tab
-- Upload multiple images
-- Process all at once
-- Download results
-
-### 4. Analytics Dashboard
-- Click **"📊 Analytics"** tab
-- View detection statistics
-- Export data as CSV/JSON
-- Analyze detection patterns
-
----
-
-## 🎯 Detection Capabilities
-
-### ✅ Detects
-- Plastic bottles (all colors)
-- Water bottles
-- Soda bottles
-- Containers
-- Cups and glasses
-- Any plastic waste
-
-### 🚫 Filters Out
-- Human faces and bodies
-- Furniture (chairs, couches)
-- Electronics (phones, laptops)
-- Metal bottles
-- Wood objects
-- Background clutter
-
----
-
-## ⚙️ Configuration
-
-### Confidence Threshold
-- **0.01-0.10**: Ultra-sensitive (more detections, some false positives)
-- **0.15**: Default (balanced)
-- **0.25+**: High confidence only (fewer detections, very accurate)
-
-### Sensitivity Modes
-- **Beach Mode**: 0.01 (maximum sensitivity)
-- **Ultra-Sensitive**: 0.05
-- **Easy**: 0.10
-- **Normal**: 0.15
-- **Expert**: 0.25
-
----
-
-## 🛠️ Technical Details
-
-### Model Architecture
-- **Base**: YOLOv5m (Medium)
-- **Parameters**: 21.2M
-- **Input Size**: 640x640
-- **Framework**: PyTorch
-- **Inference**: CPU/GPU support
-
-### Performance
-- **Detection Accuracy**: 92% on marine debris dataset
-- **FPS**: 15-30 (CPU), 60+ (GPU)
-- **Precision**: High with confidence boosting
-- **Latency**: <100ms per frame
-
-### Dependencies
-- `streamlit` - Web interface
-- `opencv-python` - Image processing
-- `torch` - Deep learning
-- `numpy` - Numerical operations
-- `pandas` - Data handling
-- `plotly` - Visualizations
-
----
-
-## 📁 Project Structure
-
-```
-smart_marine_project/
-├── reliable_web_app.py          # Main Streamlit application
-├── plastic_detector.py           # Detection engine
-├── requirements.txt              # Python dependencies
-├── data_plastic_only.yaml        # Dataset configuration
-├── README.md                     # This file
-├── QUICK_START.md               # Quick start guide
-├── vessel_modules/              # Autonomous vessel features
-├── train_plastic_only/          # Training dataset (plastic only)
-├── valid_plastic_only/          # Validation dataset
-└── smart_marine_project/        # Core package
-    ├── src/
-    │   └── plastic_detector.py  # Detection logic
-    └── models/                  # Model weights (not in repo)
-```
-
----
-
-## 🎓 For Researchers
-
-### Training Custom Model
 ```bash
-# Create plastic-only dataset
-python3 create_plastic_only_dataset.py
-
-# Train new model
-python3 train_plastic_only_model.py
+pip install pytest
+pytest -q smart_marine_project/tests
 ```
 
-### Dataset
-- **Training**: 477 plastic images
-- **Validation**: 141 plastic images
-- **Classes**: 1 (plastic only)
-- **Filtered**: Metal, wood, concrete removed
+At the time of this documentation update, the local result is **3 passed, 4 failed, and 3 skipped**. The failures concern missing-weight error behavior and benchmark input validation. Integration tests requiring model weights are skipped by default. These failures are known engineering work; they are not hidden or converted into passing claims.
 
----
+## CI/CD
 
-## 🤝 Contributing
+GitHub Actions currently installs a small core dependency set and runs Python syntax checks for `reliable_web_app.py` and `plastic_detector.py`. It does **not** run pytest, model inference, linting, browser tests, or deployment validation.
 
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+The repository also includes `render.yaml`, `Procfile`, and `runtime.txt`. Their presence documents a deployment configuration but does not prove a live or continuously healthy service.
 
----
+## Dataset and Model Provenance
 
-## 📄 License
+The dataset configuration identifies Roboflow workspace `smart-marine-project`, project `plastic-only-detection`, version `1`. The repository does not contain a source URL, immutable manifest, dataset snapshot, or sufficient attribution to independently verify the dataset license and image counts.
 
-This project is licensed under the MIT License - see LICENSE file for details.
+The runtime and historical model boundaries, license considerations, and reproducibility gaps are documented in [docs/provenance.md](docs/provenance.md).
 
----
+## Repository Hygiene
 
-## 🙏 Acknowledgments
+Generated detections, uploads, benchmark output, Streamlit state, caches, and training runs should remain outside version control. Updated ignore rules prevent new generated artifacts from being added. Existing tracked result images and reports are preserved in this documentation-only PR and should be reviewed in a separate history-cleanup change before removal.
 
-- **YOLOv5** by Ultralytics
-- **Streamlit** for the web framework
-- **OpenCV** for image processing
-- Marine conservation community
+## Limitations
 
----
+- Container-shaped objects are not necessarily plastic or marine debris.
+- Plastic outside the selected COCO classes may be missed.
+- Heuristic filters can introduce false positives and false negatives.
+- Displayed boosted confidence is not calibrated probability.
+- Historical training cannot currently be reproduced.
+- Benchmarks do not measure useful detections and do not support accuracy claims.
+- Webcam and model-download behavior depend on the local environment.
+- The vessel module is simulation-only.
 
-## 📧 Contact
+## Future Improvements
 
-For questions or support:
-- GitHub Issues: [Create an issue](https://github.com/girishk03/smart_marine_project/issues)
-- Email: saigirshchalla574@gmail.com
+- Publish an immutable, licensed dataset manifest with train/validation/test splits.
+- Add a reproducible training and evaluation pipeline.
+- Package versioned model weights with checksums or a documented model registry.
+- Replace material heuristics with a validated marine-debris taxonomy.
+- Add calibrated confidence and error analysis across representative marine imagery.
+- Repair the failing tests and run the complete suite in CI.
+- Add Streamlit startup, browser, and deployment smoke tests.
+- Remove generated artifacts from Git history in a dedicated cleanup PR.
+- Integrate physical hardware only behind explicit safety controls and field validation.
 
----
+## License
 
-## 🌟 Star History
-
-If this project helps you, please give it a ⭐!
-
----
-
-**Made with 💙 for Ocean Conservation** 🌊
+Project-authored source code is provided under the [MIT License](LICENSE). Datasets, pretrained models, and third-party dependencies retain their own licenses; see [docs/provenance.md](docs/provenance.md) before redistribution or commercial use.

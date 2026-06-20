@@ -26,6 +26,34 @@ Thumbs.db
 
 # Model Files (too large for GitHub)
 *.pt
+
+# Streamlit and local application state
+.streamlit/secrets.toml
+.streamlit/cache/
+
+# Generated application artifacts
+uploads/
+static/uploads/
+results/
+smart_marine_project/static/uploads/
+smart_marine_project/results/
+benchmark_*.json
+batch_result_*
+detection_history_*.csv
+detection_history_*.json
+
+# Generated reports and training artifacts
+reports/generated/
+report_graphs/generated/
+wandb/
+mlruns/
+
+# Test and tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 *.pth
 *.onnx
 *.weights
