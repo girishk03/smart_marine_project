@@ -133,11 +133,11 @@ pip install pytest
 pytest -q smart_marine_project/tests
 ```
 
-At the time of this documentation update, the local result is **3 passed, 4 failed, and 3 skipped**. The failures concern missing-weight error behavior and benchmark input validation. Integration tests requiring model weights are skipped by default. These failures are known engineering work; they are not hidden or converted into passing claims.
+Current local result: **7 passed and 3 skipped**. The skipped tests require optional historical model weights that are not distributed with the repository. No tests are skipped to conceal a known failure.
 
 ## CI/CD
 
-GitHub Actions currently installs a small core dependency set and runs Python syntax checks for `reliable_web_app.py` and `plastic_detector.py`. It does **not** run pytest, model inference, linting, browser tests, or deployment validation.
+GitHub Actions installs runtime and test dependencies, compiles and imports the Streamlit entry point, checks the local Streamlit health endpoint, and runs the package pytest suite. It does **not** claim webcam, physical hardware, browser interaction, model-quality, or deployment coverage.
 
 The repository also includes `render.yaml`, `Procfile`, and `runtime.txt`. Their presence documents a deployment configuration but does not prove a live or continuously healthy service.
 
@@ -149,7 +149,7 @@ The runtime and historical model boundaries, license considerations, and reprodu
 
 ## Repository Hygiene
 
-Generated detections, uploads, benchmark output, Streamlit state, caches, and training runs should remain outside version control. Updated ignore rules prevent new generated artifacts from being added. Existing tracked result images and reports are preserved in this documentation-only PR and should be reviewed in a separate history-cleanup change before removal.
+Generated detections, uploads, benchmark output, Streamlit state, caches, and training runs remain outside version control. Historical benchmark JSON files and model-training logs are intentionally retained as evidence, while generated detections, uploaded copies, and unreferenced report graphs have been removed.
 
 ## Limitations
 

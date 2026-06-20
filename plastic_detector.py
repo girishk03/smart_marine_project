@@ -21,6 +21,9 @@ class PlasticDetector:
         self.iou_threshold = iou_threshold
         self.img_size = img_size
         self.model = None
+        if model_path is not None and not os.path.isfile(model_path):
+            raise FileNotFoundError(f"Model weights not found: {model_path}")
+
         self.model_path = model_path or "yolov5m.pt"
         
         if ULTRALYTICS_AVAILABLE:
@@ -28,7 +31,7 @@ class PlasticDetector:
                 self.model = YOLO(self.model_path)
                 print(f"✅ Model loaded with ultralytics: {self.model_path}")
             except Exception as e:
-                print(f"❌ Model load failed: {e}")
+                raise RuntimeError(f"Model load failed: {self.model_path}") from e
         else:
             print("❌ ultralytics not available")
 
