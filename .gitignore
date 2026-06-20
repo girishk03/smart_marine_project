@@ -1,37 +1,63 @@
-# Python
+# Python artifacts
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
 *.so
-.Python
 *.egg-info/
-dist/
 build/
+dist/
+.Python
 
-# Virtual Environment
+# Environments
 .venv/
 venv/
 ENV/
 
-# IDE
+# Editors and operating systems
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# System Files
 .DS_Store
 Thumbs.db
 
-# Model Files (too large for GitHub)
-*.pt
+# Test and tool caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.cache/
 
-# Streamlit and local application state
+# Secrets and Streamlit state
+.env
+.env.*
+!.env.example
 .streamlit/secrets.toml
 .streamlit/cache/
 
-# Generated application artifacts
+# Model weights and training outputs
+*.pt
+*.pth
+*.onnx
+*.weights
+*.ckpt
+weights/
+checkpoints/
+runs/
+yolov5/
+wandb/
+mlruns/
+
+# Local datasets and archives
+train/
+valid/
+test/
+train_plastic_only/
+valid_plastic_only/
+roboflow.zip
+*.zip
+
+# Generated application outputs
 uploads/
 static/uploads/
 results/
@@ -41,53 +67,13 @@ benchmark_*.json
 batch_result_*
 detection_history_*.csv
 detection_history_*.json
-
-# Generated reports and training artifacts
+report_graphs/
 reports/generated/
-report_graphs/generated/
-wandb/
-mlruns/
+docs/reports/generated/
 
-# Test and tool caches
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
-.coverage
-htmlcov/
-*.pth
-*.onnx
-*.weights
-
-# Datasets (too large)
-train/
-valid/
-test/
-roboflow.zip
-*.zip
-
-# Training Outputs
-runs/
-yolov5/
-
-# Logs
+# Logs and temporary files
 *.log
-streamlit_debug.log
-
-# Archives
+*.tmp
 _archive/
 *_backup/
-
-# Temporary Files
-*.tmp
-.cache/
-.DS_Store
-*.pt
-venv/
-__pycache__/
-*.pt
-__pycache__/
-_archive/
-runs/
 smart_marine_project_backup/
-venv/
-*.pt
